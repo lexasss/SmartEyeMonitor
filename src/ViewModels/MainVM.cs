@@ -29,26 +29,45 @@ internal class MainVM : INotifyPropertyChanged
         {
             App_DebugModeChanged(this, true);
         }
+
+        var mapper = (App.Current as App)!.Mapper;
+        mapper.PlaneAdded += (s, plane) =>
+        {
+            var planeView = new Views.Plane(plane);
+            Planes.Add(planeView);
+        };
+    }
+
+    public void AddRandomPlane()
+    {
+        var name = $"Plane {new Random().Next(1000)}";
+        if (Planes.FirstOrDefault(p => p.Name == name) != null)
+        {
+            return;
+        }
+
+        _debugPlaneNames.Add(name);
+        SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
     }
 
     // Internal
 
-    readonly string[] DEBUG_PLANE_NAMES =
-    {
+    readonly List<string> _debugPlaneNames =
+    [
         "Windshield",
         "Left Mirror",
         "Left Dashboard",
         "Rear View",
         "Central Console",
         "Right Mirror",
-    };
+    ];
 
     private void App_DebugModeChanged(object? sender, bool isDebugMode)
     {
         if (isDebugMode)
         {
             var mapper = (App.Current as App)!.Mapper;
-            foreach (var name in DEBUG_PLANE_NAMES)
+            foreach (var name in _debugPlaneNames)
             {
                 var plane = mapper.Add(name);
                 if (plane != null)
@@ -58,7 +77,7 @@ internal class MainVM : INotifyPropertyChanged
                 }
             }
 
-            SEClient.Tcp.Client.SetEmulatedPlanes(DEBUG_PLANE_NAMES);
+            SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
         }
 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDebugMode)));

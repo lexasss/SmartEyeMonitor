@@ -10,9 +10,16 @@ public class Mapper
 {
     public MappingMode Mode { get; set; } = MappingMode.All;
 
+    public event EventHandler<Models.Plane>? PlaneAdded;
+
+
     public Mapper(string[]? planeNames = null)
     {
         _planes = new Models.Planes(planeNames ?? []);
+        _planes.PlaneAdded += (s, plane) =>
+        {
+            PlaneAdded?.Invoke(this, plane);
+        };
     }
 
     public Models.Plane? Add(string name) => _planes.Add(name);

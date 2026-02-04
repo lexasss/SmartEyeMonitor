@@ -7,6 +7,11 @@
 internal class Planes
 {
     /// <summary>
+    /// Fires when a new plane is generated based on received gaze data
+    /// </summary>
+    public event EventHandler<Plane>? PlaneAdded;
+
+    /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="panels">UI panels that represent planes/screen</param>
@@ -41,31 +46,37 @@ internal class Planes
     /// <summary>
     /// Must be called for each gaze-on event
     /// </summary>
-    /// <param name="plane">plane/screen name</param>
-    public void Enter(string plane)
+    /// <param name="planeName">plane/screen name</param>
+    public void Enter(string planeName)
     {
-        if (!_planes.ContainsKey(plane))
+        if (!_planes.ContainsKey(planeName))
         {
-            if (Add(plane) == null)
+            var plane = Add(planeName);
+            if (plane == null)
                 return;
+
+            PlaneAdded?.Invoke(this, plane);
         }
 
-        _planes[plane].Enter();
+        _planes[planeName].Enter();
     }
 
     /// <summary>
     /// Must be called for each gaze-off event
     /// </summary>
-    /// <param name="plane">plane/screen name</param>
-    public void Exit(string plane)
+    /// <param name="planeName">plane/screen name</param>
+    public void Exit(string planeName)
     {
-        if (!_planes.ContainsKey(plane))
+        if (!_planes.ContainsKey(planeName))
         {
-            if (Add(plane) == null)
+            var plane = Add(planeName);
+            if (plane == null)
                 return;
+
+            PlaneAdded?.Invoke(this, plane);
         }
 
-        _planes[plane].Exit();
+        _planes[planeName].Exit();
     }
 
     /// <summary>

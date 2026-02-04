@@ -12,7 +12,8 @@
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="Main"
-      FontSize="16">
+      FontSize="16"
+      Loaded="Page_Loaded">
 
     <Page.Resources>
         <vm:MainVM x:Key="vm"/>
@@ -29,11 +30,12 @@
 
     <Grid DataContext="{StaticResource vm}">
         <WrapPanel HorizontalAlignment="Center">
-            <Label Content="Mode"
+            <Label Content="Mapping mode"
                    Margin="12,0"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource MappingModeProvider}}"
                       SelectedItem="{Binding MappingMode, Mode=TwoWay}"
-                      MinWidth="100"/>
+                      MinWidth="100"
+                      VerticalContentAlignment="Center"/>
         </WrapPanel>
 
         
