@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="SmartEyeMonitor.Views.Plane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SmartEyeMonitor.Views"
+             DataContext="{Binding ViewModel, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+             mc:Ignorable="d" 
+             d:DesignHeight="200"
+             d:DesignWidth="300"
+             Padding="26"
+             Margin="8"
+             MouseDoubleClick="UserControl_MouseDoubleClick">
+    <UserControl.Style>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="Bisque"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEnabled, Mode=OneWay}" Value="False">
+                    <Setter Property="Background" Value="LightGray"/>
+                </DataTrigger>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsFocused, Mode=OneWay}" Value="True"/>
+                        <Condition Binding="{Binding IsEnabled, Mode=OneWay}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="Background" Value="Tomato"/>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Style>
+    
+    <UserControl.Resources>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="LightGray"/>
+        </Style>
+        <Style x:Key="Name" TargetType="Label">
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="Counter" TargetType="Label">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <StackPanel>
+        <Label Style="{StaticResource Name}"
+               Content="{Binding Name, Mode=OneTime}"/>
+        <Label Style="{StaticResource Counter}"
+               Content="{Binding Counter, Mode=OneWay}"/>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,58 @@
+﻿<Page x:Class="SmartEyeMonitor.Views.Main"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
+      xmlns:local="clr-namespace:SmartEyeMonitor"
+      xmlns:vm="clr-namespace:SmartEyeMonitor.ViewModels"
+      xmlns:conv="clr-namespace:SmartEyeMonitor.Converters"
+      xmlns:srv="clr-namespace:SmartEyeMonitor.Services"
+      mc:Ignorable="d" 
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="Main"
+      FontSize="16">
+
+    <Page.Resources>
+        <vm:MainVM x:Key="vm"/>
+        <conv:VisibilityConverter x:Key="bool2vis"/>
+        
+        <ObjectDataProvider x:Key="MappingModeProvider"
+                            MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="srv:MappingMode"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Page.Resources>
+
+    <Grid DataContext="{StaticResource vm}">
+        <WrapPanel HorizontalAlignment="Center">
+            <Label Content="Mode"
+                   Margin="12,0"/>
+            <ComboBox ItemsSource="{Binding Source={StaticResource MappingModeProvider}}"
+                      SelectedItem="{Binding MappingMode, Mode=TwoWay}"
+                      MinWidth="100"/>
+        </WrapPanel>
+
+        
+        <ItemsControl ItemsSource="{Binding Planes}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        
+        <Label Content="DEBUG MODE"
+               Visibility="{Binding IsDebugMode, Converter={StaticResource bool2vis}}"
+               Foreground="DarkRed"
+               FontWeight="Bold"
+               Margin="8"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Top"/>
+    </Grid>
+</Page>
