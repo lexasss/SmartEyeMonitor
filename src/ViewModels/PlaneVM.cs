@@ -52,13 +52,6 @@ public class PlaneVM : INotifyPropertyChanged
         _plane.Left += Plane_Left;
     }
 
-    public void Reset()
-    {
-        Counter = 0;
-
-        _startMs = 0;
-    }
-
     // Internal
 
     readonly Plane _plane;
@@ -67,7 +60,7 @@ public class PlaneVM : INotifyPropertyChanged
 
     private void Plane_Focused(object? sender, EventArgs e)
     {
-        _startMs = Services.Timestamp.Ms;
+        _startMs = Services.Timestamp.Ms + 1;
 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFocused)));
     }

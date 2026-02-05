@@ -37,6 +37,7 @@ public partial class Connect : Page
         var vm = (((FrameworkElement)Content).DataContext as ViewModels.ConnectVM)!;
         if (!vm.Validate())
         {
+            (App.Current as App)!.IsDebugging = false;
             return;
         }
 

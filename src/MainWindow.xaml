@@ -8,5 +8,6 @@
         Title="SmartEye Monitor"
         FontSize="16"
         MinWidth="1000"
-        MinHeight="600">
+        MinHeight="600"
+        Icon="/Assets/Images/icon.png">
 </Window>

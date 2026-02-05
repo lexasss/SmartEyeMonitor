@@ -10,12 +10,25 @@
     <Company>Tampere University</Company>
     <Copyright>Oleg Spakov @ 2026</Copyright>
     <LangVersion>preview</LangVersion>
+    <ApplicationIcon>Assets\Images\icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Images\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Images\icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="SEClient">
       <HintPath>..\..\SEClient\Client\bin\Debug\net6.0-windows\SEClient.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\icon.png" />
   </ItemGroup>
 
   <ItemGroup>

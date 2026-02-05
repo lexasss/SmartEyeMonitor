@@ -5,37 +5,43 @@ namespace SmartEyeMonitor.ViewModels;
 
 internal class MainVM : INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public bool IsDebugMode => (App.Current as App)!.IsDebugging;
 
     public ObservableCollection<Views.Plane> Planes { get; } = [];
 
     public Services.MappingMode MappingMode
     {
-        get => (App.Current as App)!.Mapper.Mode;
+        get => _mapper.Mode;
         set
         {
-            (App.Current as App)!.Mapper.Mode = value;
+            _mapper.Mode = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MappingMode)));
         }
     }
 
-    public bool IsDebugMode => (App.Current as App)!.IsDebugging;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public MainVM()
     {
         var app = (App.Current as App)!;
-        app.DebugModeChanged += App_DebugModeChanged;
+        _mapper = app.Mapper;
+
+        _mapper.PlaneAdded += Mapper_PlaneAdded;
+
         if (app.IsDebugging)
         {
-            App_DebugModeChanged(this, true);
-        }
+            foreach (var name in _debugPlaneNames)
+            {
+                var plane = _mapper.Add(name);
+                if (plane != null)
+                {
+                    var planeView = new Views.Plane(plane);
+                    Planes.Add(planeView);
+                }
+            }
 
-        var mapper = (App.Current as App)!.Mapper;
-        mapper.PlaneAdded += (s, plane) =>
-        {
-            var planeView = new Views.Plane(plane);
-            Planes.Add(planeView);
-        };
+            SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
+        }
     }
 
     public void AddRandomPlane()
@@ -62,24 +68,11 @@ internal class MainVM : INotifyPropertyChanged
         "Right Mirror",
     ];
 
-    private void App_DebugModeChanged(object? sender, bool isDebugMode)
+    readonly Services.Mapper _mapper;
+
+    private void Mapper_PlaneAdded(object? sender, Models.Plane plane)
     {
-        if (isDebugMode)
-        {
-            var mapper = (App.Current as App)!.Mapper;
-            foreach (var name in _debugPlaneNames)
-            {
-                var plane = mapper.Add(name);
-                if (plane != null)
-                {
-                    var planeView = new Views.Plane(plane);
-                    Planes.Add(planeView);
-                }
-            }
-
-            SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
-        }
-
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDebugMode)));
+        var planeView = new Views.Plane(plane);
+        Planes.Add(planeView);
     }
 }

@@ -29,7 +29,8 @@
     </Page.Resources>
 
     <Grid DataContext="{StaticResource vm}">
-        <WrapPanel HorizontalAlignment="Center">
+        <WrapPanel HorizontalAlignment="Center"
+                   Margin="8">
             <Label Content="Mapping mode"
                    Margin="12,0"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource MappingModeProvider}}"

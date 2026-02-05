@@ -1,14 +1,18 @@
-﻿namespace SmartEyeMonitor.Services;
+﻿using SmartEyeMonitor.Converters;
+using System.ComponentModel;
 
+namespace SmartEyeMonitor.Services;
+
+[TypeConverter(typeof(FriendlyEnumConverter))]
 public enum MappingMode
 {
-    All,
-    Closest
+    AllPlanes,
+    ClosestPlane
 }
 
 public class Mapper
 {
-    public MappingMode Mode { get; set; } = MappingMode.All;
+    public MappingMode Mode { get; set; } = MappingMode.AllPlanes;
 
     public event EventHandler<Models.Plane>? PlaneAdded;
 
@@ -16,10 +20,6 @@ public class Mapper
     public Mapper(string[]? planeNames = null)
     {
         _planes = new Models.Planes(planeNames ?? []);
-        _planes.PlaneAdded += (s, plane) =>
-        {
-            PlaneAdded?.Invoke(this, plane);
-        };
     }
 
     public Models.Plane? Add(string name) => _planes.Add(name);
@@ -43,7 +43,7 @@ public class Mapper
 
     private void HandleIntersection(SEClient.Tcp.Data.Sample sample)
     {
-        if (Mode == MappingMode.All)
+        if (Mode == MappingMode.AllPlanes)
             HandleAllIntersections(sample);
         else
             HandleClosestIntersection(sample);
@@ -67,12 +67,12 @@ public class Mapper
             if (_currentIntersectionName != intersectionName)
             {
                 _currentIntersectionName = intersectionName;
-                _planes.Enter(intersectionName);
+                HandleNewPlane(_planes.Enter(intersectionName, out var plane), plane);
             }
         }
         else if (!string.IsNullOrEmpty(_currentIntersectionName))
         {
-            _planes.Exit(_currentIntersectionName);
+            HandleNewPlane(_planes.Exit(_currentIntersectionName, out var plane), plane);
             _currentIntersectionName = "";
         }
     }
@@ -99,7 +99,7 @@ public class Mapper
 
                 if (!_currentIntersectionNames.Contains(intersectionName))
                 {
-                    _planes.Enter(intersectionName);
+                    HandleNewPlane(_planes.Enter(intersectionName, out var plane), plane);
                 }
             }
         }
@@ -107,9 +107,17 @@ public class Mapper
         _currentIntersectionNames.ExceptWith(activePlanes);
         foreach (var intersectionName in _currentIntersectionNames)
         {
-            _planes.Exit(intersectionName);
+            HandleNewPlane(_planes.Exit(intersectionName, out var plane), plane);
         }
 
         _currentIntersectionNames = activePlanes;
+    }
+
+    private void HandleNewPlane(bool wasAdded, Models.Plane? plane)
+    {
+        if (wasAdded && plane != null)
+        {
+            PlaneAdded?.Invoke(this, plane);
+        }
     }
 }

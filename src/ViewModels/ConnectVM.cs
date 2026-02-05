@@ -16,7 +16,6 @@ internal class ConnectVM : INotifyPropertyChanged
             Properties.Settings.Default.Save();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Host)));
         }
-
     }
 
     public ushort Port
@@ -28,7 +27,6 @@ internal class ConnectVM : INotifyPropertyChanged
             Properties.Settings.Default.Save();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Port)));
         }
-
     }
 
     public SEClient.IntersectionSource IntersectionSource

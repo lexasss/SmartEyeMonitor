@@ -7,11 +7,6 @@
 internal class Planes
 {
     /// <summary>
-    /// Fires when a new plane is generated based on received gaze data
-    /// </summary>
-    public event EventHandler<Plane>? PlaneAdded;
-
-    /// <summary>
     /// Constructor
     /// </summary>
     /// <param name="panels">UI panels that represent planes/screen</param>
@@ -47,36 +42,48 @@ internal class Planes
     /// Must be called for each gaze-on event
     /// </summary>
     /// <param name="planeName">plane/screen name</param>
-    public void Enter(string planeName)
+    /// <param name="plane">plane object</param>
+    /// <returns>True if the plane was added, false otherwise</returns>
+    public bool Enter(string planeName, out Plane? plane)
     {
+        bool wasAdded = false;
+        plane = null;
+
         if (!_planes.ContainsKey(planeName))
         {
-            var plane = Add(planeName);
-            if (plane == null)
-                return;
-
-            PlaneAdded?.Invoke(this, plane);
+            wasAdded = Add(planeName) != null;
+            if (!wasAdded)
+                return false;
         }
 
-        _planes[planeName].Enter();
+        plane = _planes[planeName];
+        plane.Enter();
+
+        return wasAdded;
     }
 
     /// <summary>
     /// Must be called for each gaze-off event
     /// </summary>
     /// <param name="planeName">plane/screen name</param>
-    public void Exit(string planeName)
+    /// <param name="plane">plane object</param>
+    /// <returns>True if the plane was added, false otherwise</returns>
+    public bool Exit(string planeName, out Plane? plane)
     {
+        bool wasAdded = false;
+        plane = null;
+
         if (!_planes.ContainsKey(planeName))
         {
-            var plane = Add(planeName);
-            if (plane == null)
-                return;
-
-            PlaneAdded?.Invoke(this, plane);
+            wasAdded = Add(planeName) != null;
+            if (!wasAdded)
+                return false;
         }
 
-        _planes[planeName].Exit();
+        plane = _planes[planeName];
+        plane.Exit();
+
+        return wasAdded;
     }
 
     /// <summary>

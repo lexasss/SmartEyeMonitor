@@ -50,12 +50,12 @@
         <Label Grid.Row="0" Grid.Column="0"
                Content="Host"/>
         <TextBox Grid.Row="0" Grid.Column="1"
-                 Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                 Text="{Binding Host, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Row="1" Grid.Column="0"
                Content="Port"/>
         <TextBox Grid.Row="1" Grid.Column="1"
-                 Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                 Text="{Binding Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Row="2" Grid.Column="0"
                Content="Source"/>

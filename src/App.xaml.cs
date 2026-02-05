@@ -5,17 +5,9 @@ namespace SmartEyeMonitor;
 
 public partial class App : Application
 {
-    public bool IsDebugging
-    { 
-        get => field;
-        set
-        {
-            field = value;
-            DebugModeChanged?.Invoke(this, field);
-        }
-    } = false;
+    public bool IsDebugging { get; set; } = false;
 
-    public event EventHandler<bool>? DebugModeChanged;
+    public Services.Mapper Mapper { get; } = new();
 
     public SEClient.Tcp.Client? EyeTracker
     {
@@ -37,8 +29,6 @@ public partial class App : Application
             }
         }
     }
-
-    public Services.Mapper Mapper { get; } = new();
 
     public App() : base()
     {
