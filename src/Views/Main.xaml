@@ -18,7 +18,7 @@
     <Page.Resources>
         <vm:MainVM x:Key="vm"/>
         <conv:VisibilityConverter x:Key="bool2vis"/>
-        
+
         <ObjectDataProvider x:Key="MappingModeProvider"
                             MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
@@ -39,6 +39,12 @@
                       VerticalContentAlignment="Center"/>
         </WrapPanel>
 
+        <Label Content="No planes detected yet"
+               Visibility="{Binding HasNoPlanes, Converter={StaticResource bool2vis}}"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="24"
+               Foreground="Gray"/>
         
         <ItemsControl ItemsSource="{Binding Planes}"
                       VerticalAlignment="Center"

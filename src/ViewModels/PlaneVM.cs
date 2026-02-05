@@ -50,6 +50,11 @@ public class PlaneVM : INotifyPropertyChanged
         _plane = plane;
         _plane.Focused += Plane_Focused;
         _plane.Left += Plane_Left;
+
+        if (plane.IsFocused)
+        {
+            Plane_Focused(this, EventArgs.Empty);
+        }
     }
 
     // Internal

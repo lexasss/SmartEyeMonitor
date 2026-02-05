@@ -9,6 +9,8 @@ internal class MainVM : INotifyPropertyChanged
 
     public ObservableCollection<Views.Plane> Planes { get; } = [];
 
+    public bool HasNoPlanes => Planes.Count == 0;
+
     public Services.MappingMode MappingMode
     {
         get => _mapper.Mode;
@@ -23,25 +25,8 @@ internal class MainVM : INotifyPropertyChanged
 
     public MainVM()
     {
-        var app = (App.Current as App)!;
-        _mapper = app.Mapper;
-
+        _mapper = (App.Current as App)!.Mapper;
         _mapper.PlaneAdded += Mapper_PlaneAdded;
-
-        if (app.IsDebugging)
-        {
-            foreach (var name in _debugPlaneNames)
-            {
-                var plane = _mapper.Add(name);
-                if (plane != null)
-                {
-                    var planeView = new Views.Plane(plane);
-                    Planes.Add(planeView);
-                }
-            }
-
-            SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
-        }
     }
 
     public void AddRandomPlane()
@@ -58,15 +43,7 @@ internal class MainVM : INotifyPropertyChanged
 
     // Internal
 
-    readonly List<string> _debugPlaneNames =
-    [
-        "Windshield",
-        "Left Mirror",
-        "Left Dashboard",
-        "Rear View",
-        "Central Console",
-        "Right Mirror",
-    ];
+    readonly List<string> _debugPlaneNames = [];
 
     readonly Services.Mapper _mapper;
 
@@ -74,5 +51,7 @@ internal class MainVM : INotifyPropertyChanged
     {
         var planeView = new Views.Plane(plane);
         Planes.Add(planeView);
+
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasNoPlanes)));
     }
 }
