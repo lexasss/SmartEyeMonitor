@@ -38,7 +38,7 @@ internal class MainVM : INotifyPropertyChanged
         }
 
         _debugPlaneNames.Add(name);
-        SEClient.Tcp.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
+        SmartEyeTools.Client.SetEmulatedPlanes(_debugPlaneNames.ToArray());
     }
 
     // Internal

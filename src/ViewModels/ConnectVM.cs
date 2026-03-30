@@ -29,22 +29,22 @@ internal class ConnectVM : INotifyPropertyChanged
         }
     }
 
-    public SEClient.IntersectionSource IntersectionSource
+    public SmartEyeTools.IntersectionSource IntersectionSource
     {
-        get => SEClient.Options.Instance.IntersectionSource;
+        get => SmartEyeTools.Options.Instance.IntersectionSource;
         set
         {
-            SEClient.Options.Instance.IntersectionSource = value;
+            SmartEyeTools.Options.Instance.IntersectionSource = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IntersectionSource)));
         }
     }
 
     public bool IsFiltered
     {
-        get => SEClient.Options.Instance.IntersectionSourceFiltered;
+        get => SmartEyeTools.Options.Instance.IntersectionSourceFiltered;
         set
         {
-            SEClient.Options.Instance.IntersectionSourceFiltered = value;
+            SmartEyeTools.Options.Instance.IntersectionSourceFiltered = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFiltered)));
         }
     }
@@ -80,7 +80,7 @@ internal class ConnectVM : INotifyPropertyChanged
     {
         IsConnecting = true;
 
-        var eyeTracker = new SEClient.Tcp.Client();
+        var eyeTracker = new SmartEyeTools.Client();
         await eyeTracker.Connect(Host, Port, (App.Current as App)!.IsDebugging);
 
         if (eyeTracker.IsConnected)
@@ -102,7 +102,7 @@ internal class ConnectVM : INotifyPropertyChanged
 
     // Internal
 
-    private void ShowError(string msg)
+    private static void ShowError(string msg)
     {
         MessageBox.Show(msg, Application.Current.MainWindow.Title, MessageBoxButton.OK, MessageBoxImage.Error);
     }

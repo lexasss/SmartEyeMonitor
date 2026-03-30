@@ -24,14 +24,14 @@ public class Mapper
 
     public Models.Plane? Add(string name) => _planes.Add(name);
 
-    public void Feed(SEClient.Tcp.Data.Sample sample)
+    public void Feed(SmartEyeTools.Data.Sample sample)
     {
         HandleIntersection(sample);
     }
 
     public void Reset()
     {
-        HandleIntersection(new SEClient.Tcp.Data.Sample());
+        HandleIntersection(new SmartEyeTools.Data.Sample());
     }
 
     // Internal
@@ -41,7 +41,7 @@ public class Mapper
     string _currentIntersectionName = "";
     HashSet<string> _currentIntersectionNames = new();
 
-    private void HandleIntersection(SEClient.Tcp.Data.Sample sample)
+    private void HandleIntersection(SmartEyeTools.Data.Sample sample)
     {
         if (Mode == MappingMode.AllPlanes)
             HandleAllIntersections(sample);
@@ -49,19 +49,19 @@ public class Mapper
             HandleClosestIntersection(sample);
     }
 
-    private void HandleClosestIntersection(SEClient.Tcp.Data.Sample sample)
+    private void HandleClosestIntersection(SmartEyeTools.Data.Sample sample)
     {
-        var seClientOptions = SEClient.Options.Instance;
+        var seClientOptions = SmartEyeTools.Options.Instance;
         var intersectionSource = (seClientOptions.IntersectionSource, seClientOptions.IntersectionSourceFiltered) switch
         {
-            (SEClient.IntersectionSource.Gaze, false) => sample.ClosestWorldIntersection,
-            (SEClient.IntersectionSource.Gaze, true) => sample.FilteredClosestWorldIntersection,
-            (SEClient.IntersectionSource.AI, false) => sample.EstimatedClosestWorldIntersection,
-            (SEClient.IntersectionSource.AI, true) => sample.FilteredEstimatedClosestWorldIntersection,
+            (SmartEyeTools.IntersectionSource.Gaze, false) => sample.ClosestWorldIntersection,
+            (SmartEyeTools.IntersectionSource.Gaze, true) => sample.FilteredClosestWorldIntersection,
+            (SmartEyeTools.IntersectionSource.AI, false) => sample.EstimatedClosestWorldIntersection,
+            (SmartEyeTools.IntersectionSource.AI, true) => sample.FilteredEstimatedClosestWorldIntersection,
             _ => throw new Exception($"This intersection source is not implemented")
         };
 
-        if (intersectionSource is SEClient.Tcp.WorldIntersection intersection)
+        if (intersectionSource is SmartEyeTools.WorldIntersection intersection)
         {
             var intersectionName = intersection.ObjectName.AsString;
             if (_currentIntersectionName != intersectionName)
@@ -77,20 +77,20 @@ public class Mapper
         }
     }
 
-    private void HandleAllIntersections(SEClient.Tcp.Data.Sample sample)
+    private void HandleAllIntersections(SmartEyeTools.Data.Sample sample)
     {
-        var seClientOptions = SEClient.Options.Instance;
+        var seClientOptions = SmartEyeTools.Options.Instance;
         var intersectionSources = (seClientOptions.IntersectionSource, seClientOptions.IntersectionSourceFiltered) switch
         {
-            (SEClient.IntersectionSource.Gaze, false) => sample.AllWorldIntersections,
-            (SEClient.IntersectionSource.Gaze, true) => sample.FilteredAllWorldIntersections,
-            (SEClient.IntersectionSource.AI, false) => sample.EstimatedAllWorldIntersections,
-            (SEClient.IntersectionSource.AI, true) => sample.FilteredEstimatedAllWorldIntersections,
+            (SmartEyeTools.IntersectionSource.Gaze, false) => sample.AllWorldIntersections,
+            (SmartEyeTools.IntersectionSource.Gaze, true) => sample.FilteredAllWorldIntersections,
+            (SmartEyeTools.IntersectionSource.AI, false) => sample.EstimatedAllWorldIntersections,
+            (SmartEyeTools.IntersectionSource.AI, true) => sample.FilteredEstimatedAllWorldIntersections,
             _ => throw new Exception($"This intersection source is not implemented")
         };
 
         var activePlanes = new HashSet<string>();
-        if (intersectionSources is SEClient.Tcp.WorldIntersection[] intersections)
+        if (intersectionSources is SmartEyeTools.WorldIntersection[] intersections)
         {
             foreach (var intersection in intersections)
             {

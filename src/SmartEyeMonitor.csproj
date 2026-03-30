@@ -22,9 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="SEClient">
-      <HintPath>..\..\SEClient\Client\bin\Debug\net6.0-windows\SEClient.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Tuni.SmartEyeTools" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>

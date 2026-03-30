@@ -6,7 +6,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:vm="clr-namespace:SmartEyeMonitor.ViewModels"
       xmlns:conv="clr-namespace:SmartEyeMonitor.Converters"
-      xmlns:sec="clr-namespace:SEClient;assembly=SEClient"
+      xmlns:smarteye="clr-namespace:SmartEyeTools;assembly=SmartEyeTools"
       mc:Ignorable="d" 
       d:DesignHeight="450"
       d:DesignWidth="800"
@@ -27,7 +27,7 @@
                             MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="sec:IntersectionSource"/>
+                <x:Type TypeName="smarteye:IntersectionSource"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Page.Resources>

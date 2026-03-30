@@ -9,7 +9,7 @@ public partial class App : Application
 
     public Services.Mapper Mapper { get; } = new();
 
-    public SEClient.Tcp.Client? EyeTracker
+    public SmartEyeTools.Client? EyeTracker
     {
         get => field;
         set
@@ -32,7 +32,7 @@ public partial class App : Application
 
     public App() : base()
     {
-        SEClient.Options.Load(SE_CLIENT_OPTIONS_FILENAME);
+        SmartEyeTools.Options.Load(SE_CLIENT_OPTIONS_FILENAME);
 
         // Set the US-culture across the application to avoid decimal point parsing/logging issues
         var culture = CultureInfo.GetCultureInfo("en-US");
@@ -59,7 +59,7 @@ public partial class App : Application
         catch (TaskCanceledException) { }
     }
 
-    private void TcpClient_Sample(object? sender, SEClient.Tcp.Data.Sample sample)
+    private void TcpClient_Sample(object? sender, SmartEyeTools.Data.Sample sample)
     {
         try
         {
